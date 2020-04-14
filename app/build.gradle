@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.1"
+    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.gcu.mobilecoursework"
         minSdkVersion 23
@@ -15,17 +15,36 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField 'String', 'PLANNED_INCIDENTS', '"https://trafficscotland.org/rss/feeds/plannedroadworks.aspx"'
+            buildConfigField 'String', 'PLANNED_ROADWORKS', '"https://trafficscotland.org/rss/feeds/plannedroadworks.aspx"'
             buildConfigField 'String', 'ROADWORKS', '"https://trafficscotland.org/rss/feeds/roadworks.aspx"'
             buildConfigField 'String', 'CURRENT_INCIDENTS', '"https://trafficscotland.org/rss/feeds/currentincidents.aspx"'
         }
         debug {
-            buildConfigField 'String', 'PLANNED_INCIDENTS', '"https://trafficscotland.org/rss/feeds/plannedroadworks.aspx"'
+            buildConfigField 'String', 'PLANNED_ROADWORKS', '"https://trafficscotland.org/rss/feeds/plannedroadworks.aspx"'
             buildConfigField 'String', 'ROADWORKS', '"https://trafficscotland.org/rss/feeds/roadworks.aspx"'
             buildConfigField 'String', 'CURRENT_INCIDENTS', '"https://trafficscotland.org/rss/feeds/currentincidents.aspx"'
                }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs =
+                    [
+                            'src/main/res/layout/activities',
+                            'src/main/res',
+                            'src/main/res/layouts/activities',
+                            'src/main/res/layouts/fragments', 'src/main/res/layouts/shared'
+                    ]
+        }
+    }
 }
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -34,6 +53,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.maps.android:android-maps-utils:0.5'
+    implementation 'com.google.maps:google-maps-services:0.2.11'
+    implementation 'com.google.android.libraries.places:places:2.2.0'
+//    implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
+
 
 }

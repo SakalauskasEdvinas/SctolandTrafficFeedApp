@@ -1,16 +1,15 @@
-package com.gcu.mobilecoursework.Model;
+package com.gcu.mobilecoursework.model;
 
-import android.util.Log;
+import com.gcu.mobilecoursework.helper.DateUtility;
 
-import java.text.DateFormat;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
-public class TrafficFeedModel {
+// By Edvinas Sakalauskas - S1627176
+public class TrafficFeedModel implements Serializable {
     private String title;
     private String description;
     private String link;
@@ -20,9 +19,9 @@ public class TrafficFeedModel {
 
     private Date startDate;
     private Date endDate;
-
-
     private Date pubDate;
+
+    private RoadworkType roadworkType;
 
     public String getTitle() {
         return title;
@@ -37,9 +36,13 @@ public class TrafficFeedModel {
     }
 
     public void setDescription(String description) {
-
         this.description = description;
         this.parseStartAndEndDatesFromDescription(description);
+        if (roadworkType == RoadworkType.PLANNED_ROADWORK) {
+            parsePlannedRoadworkDescriptionValues();
+        }
+
+
     }
 
     public String getLink() {
@@ -74,49 +77,117 @@ public class TrafficFeedModel {
         this.comments = comments;
     }
 
-
-    public void setPubDate(String nextText) {
-        System.out.println("Parsing date");
-        this.pubDate = stringToDate(nextText);
-
-    }
-
-
     public Date getPubDate() {
         return pubDate;
     }
 
-    public void parseStartAndEndDatesFromDescription(String description) {
-//        description = description.replaceAll("<.*?>","\n");
-        DateFormat format = new SimpleDateFormat("EE, dd MMMMM y hh:mm:ss z", Locale.ENGLISH);
-        String[] stringParts = description.split("<br />");
+    public void setPubDate(String nextText) {
+        this.pubDate = DateUtility.stringToDate(nextText);
 
-        String startDate = stringParts[0].split("Start Date:")[1];
-        String endDate =stringParts[1].split("End Date:")[1];
-        String descriptionWithoutDates = stringParts[2];
-        System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////");
-        System.out.println(startDate);
-        System.out.println("//////////////////////////////////////////////////////////////////////////////////////////////////////");
-        System.out.println(endDate);
-        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    }
 
-        this.startDate = stringToDate(startDate);
-        this.endDate = stringToDate(endDate);
-        System.out.println(descriptionWithoutDates);
-        this.description = descriptionWithoutDates;
+    private void parsePlannedRoadworkDescriptionValues() {
+        String[] parts = this.description.split("(?=Type :|Location :|Lane Closures :|Works :|Traffic Management :|Status :)");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String string : parts) {
+            stringBuilder.append(string.replaceAll(" :", ":"));
+            stringBuilder.append("\n \n");
+        }
+        this.description = stringBuilder.toString();
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    protected void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getStartDateString() {
+        return DateUtility.dateToString(startDate);
+    }
+
+    public String getEndDateString() {
+        return DateUtility.dateToString(endDate);
+    }
+
+    public String getPubDateString() {
+        return DateUtility.dateToString(pubDate);
+    }
+
+    public RoadworkType getRoadworkType() {
+        return roadworkType;
     }
 
 
-    private Date stringToDate(String dateString) {
-        DateFormat format = new SimpleDateFormat("EE, dd MMMMM y hh:mm:ss z", Locale.ENGLISH);
-        Date date = null;
-        try {
-            date = format.parse(dateString);
-        } catch (ParseException e) {
-            Log.e("Date parse failed", Objects.requireNonNull(e.getLocalizedMessage()));
+    private void parseStartAndEndDatesFromDescription(String description) {
+        String[] stringParts = description.split("<br />");
+
+
+        if (stringParts.length >= 2) {
+            String startDateString = stringParts[0].split("Start Date:")[1];
+            String endDateString = stringParts[1].split("End Date:")[1];
+
+            this.startDate = DateUtility.stringToDate(startDateString);
+            this.endDate = DateUtility.stringToDate(endDateString);
         }
 
-        return date;
+        //if descriptions has more than the dates, set the remaining value  as the new description
+        if (stringParts.length >= 3) {
+            this.description = stringParts[2];
+        } else {
+            this.description = "No description provided";
+        }
+
+
+    }
+
+    public Double[] getCoordinates() {
+        String[] parts = this.geoPoint.split(" ", -1);
+        Double[] coordinates = new Double[2];
+        coordinates[0] = Double.parseDouble(parts[0]);
+        coordinates[1] = Double.parseDouble(parts[1]);
+        return coordinates;
+    }
+
+    public void setType(RoadworkType roadworkType) {
+        this.roadworkType = roadworkType;
+    }
+
+    public boolean checkIfIsDuringADate(Date targetDate) {
+        if (startDate == null) {
+            return true;
+        }
+        return (targetDate.after(startDate) || targetDate.equals(startDate)) && (targetDate.before(endDate) || targetDate.equals(endDate));
+    }
+
+    public boolean matchesTitleOrDescription(String query) {
+        return this.getTitle() != null && this.getTitle().toLowerCase().contains(query.toLowerCase())
+                || this.getDescription() != null && this.getDescription().toLowerCase().contains(query.toLowerCase());
+
+    }
+
+    public long getRoadworkDayLength() {
+        SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
+        long diff = 0;
+
+        try {
+            Date date1 = myFormat.parse(DateUtility.dateToString(startDate));
+            Date date2 = myFormat.parse(DateUtility.dateToString(endDate));
+            diff = date2.getTime() - date1.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -128,8 +199,10 @@ public class TrafficFeedModel {
                 ", geoPoint='" + geoPoint + '\'' +
                 ", author='" + author + '\'' +
                 ", comments='" + comments + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
                 ", pubDate=" + pubDate +
+                ", roadworkType=" + roadworkType +
                 '}';
     }
-
 }

@@ -1,11 +1,45 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+
+
+    <style name="date_button_style" parent="Widget.AppCompat.SearchView">
+        <item name="android:background"> @drawable/background </item>
     </style>
+
+    <style name="HeaderBar">
+        <item name="android:background">#303F9F</item>
+    </style>
+
+
+    <style name="spinner_style">
+
+        <item name="android:background">@drawable/spinner</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:left">50dp</item>
+        <item name="android:popupBackground">@color/White</item>
+        <item name="android:textColor">@color/Black</item>
+    </style>
+
+    <style name="button_style_map_list">
+
+        <item name="android:background">@drawable/date_select</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:left">50dp</item>
+        <item name="android:textColor">@color/Chocolate</item>
+    </style>
+
+
+
+
+    <style name="text_style">
+        <item name="android:paddingLeft">30dp</item>
+        <item name="android:paddingRight">30dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+
+    </style>
+
 
 </resources>
