@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--By Edvinas Sakalauskas -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <include
+        layout="@layout/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/journeyInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                style="@android:style/Widget.Material.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onBackClick"
+                android:text="@string/back" />
+
+            <TextView
+
+                android:id="@+id/tripDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/route_duration"
+                android:textColor="@color/Black"
+                android:textSize="8pt" />
+
+            <TextView
+                android:id="@+id/numberOfDisruptions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tripDuration"
+                android:layout_centerHorizontal="true"
+                android:text="@string/number_of_disruptions"
+                android:textSize="8pt" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/toolbar"
+        android:padding="5dp"
+        android:text="@string/plan_a_journey"
+        android:textSize="8pt" />
+    <RelativeLayout
+        android:id="@+id/inputArea"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:padding="20dp">
+
+
+
+        <RelativeLayout
+            android:id="@+id/input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:layout_marginBottom="5dp">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/fromLocationCard"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <fragment
+                        android:id="@+id/fromLocation"
+                        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content" />
+                </FrameLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/toLocationCard"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/fromLocationCard">
+
+
+                <fragment
+                    android:id="@+id/toLocation"
+                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/toLocationCard" />
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/dateSelection"
+            style="@style/button_style_map_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/input"
+            android:layout_alignStart="@id/input"
+            android:layout_alignEnd="@id/input"
+            android:layout_marginTop="10dp"
+
+            android:onClick="showDatePickerDialog"
+            android:text="Select date"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/planJourneyButton"
+            style="@android:style/Widget.Material.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_alignStart="@id/dateSelection"
+            android:layout_alignEnd="@id/dateSelection"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dateSelection"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="150dp"
+            android:layout_marginLeft="150dp"
+
+            android:text="@string/plan_journey_button">
+
+        </Button>
+
+
+    </RelativeLayout>
+
+
+
+
+    <FrameLayout
+        android:id="@+id/mapFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/journeyInfo"
+        android:visibility="invisible">
+
+        <fragment
+            android:id="@+id/map_view_map_2"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            />
+
+
+
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/inputArea"
+        />
+
+
+
+
+</RelativeLayout>

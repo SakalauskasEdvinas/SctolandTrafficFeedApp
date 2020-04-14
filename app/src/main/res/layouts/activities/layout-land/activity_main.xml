@@ -1,0 +1,109 @@
+<!--By Edvinas Sakalauskas -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="horizontal">
+
+
+    <include
+        layout="@layout/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/lin1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:id="@+id/spinner_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="vertical"
+            android:paddingBottom="5dp">
+
+
+            <TextView
+                android:id="@+id/spinnerLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="@string/traffic_information_for"
+                android:textSize="22sp">
+
+            </TextView>
+
+            <FrameLayout
+                android:id="@+id/spinner_fragment_layout"
+                android:layout_width="wrap_content"
+                android:layout_below="@id/spinnerLabel"
+                android:layout_height="wrap_content">
+
+                <fragment
+                    android:id="@+id/spinner_fragment"
+                    android:name="com.gcu.mobilecoursework.SpinnerFragment"
+                    android:layout_width="370dp"
+                    android:layout_height="50dp"
+                    android:layout_marginRight="5dp"
+
+                    />
+            </FrameLayout>
+
+
+            <Button
+                android:id="@+id/dateSelect"
+                style="@style/button_style_map_list"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/spinnerLabel"
+                android:layout_alignBaseline="@id/spinner_fragment_layout"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="0dp"
+                android:layout_toEndOf="@id/spinner_fragment_layout"
+                android:onClick="showDatePickerDialog"
+                android:text="@string/select_date"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:attr/progressBarStyleLargeInverse"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/spinner_layout"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+
+        android:id="@+id/trafficFeedList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lin1" />
+
+    <TextView
+        android:id="@+id/infoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/no_data_available_for_selected_filters"
+        android:textSize="20sp"
+        android:visibility="gone" />
+</RelativeLayout>
+
+

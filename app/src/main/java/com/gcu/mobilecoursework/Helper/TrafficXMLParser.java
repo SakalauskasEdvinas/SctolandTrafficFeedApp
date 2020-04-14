@@ -1,8 +1,9 @@
-package com.gcu.mobilecoursework.Helper;
+package com.gcu.mobilecoursework.helper;
 
 import android.util.Log;
 
-import com.gcu.mobilecoursework.Model.TrafficFeedModel;
+import com.gcu.mobilecoursework.model.RoadworkType;
+import com.gcu.mobilecoursework.model.TrafficFeedModel;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -13,10 +14,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
+// By Edvinas Sakalauskas - S1627176
 
 public class TrafficXMLParser {
 
+    RoadworkType roadworkType;
+
+    public TrafficXMLParser(RoadworkType roadworkType) {
+        this.roadworkType = roadworkType;
+    }
 
     public List<TrafficFeedModel> parseXML(InputStream inputStream) throws IOException {
         List<TrafficFeedModel> trafficFeedModelList = null;
@@ -29,7 +35,7 @@ public class TrafficXMLParser {
             trafficFeedModelList = parse(parser);
 
         } catch (XmlPullParserException e) {
-           Log.i("Parser exception", Objects.requireNonNull(e.getMessage()));
+            Log.i("Parser exception", Objects.requireNonNull(e.getMessage()));
         }
 
         return trafficFeedModelList;
@@ -54,6 +60,8 @@ public class TrafficXMLParser {
                     if (name.equalsIgnoreCase("item")) {
                         Log.i("new item", "Create new item");
                         item = new TrafficFeedModel();
+                        item.setType(roadworkType);
+
                     } else if (item != null) {
                         if (name.equalsIgnoreCase("title")) {
                             Log.i("Attribute", "setLink");
@@ -61,7 +69,7 @@ public class TrafficXMLParser {
                         } else if (name.equalsIgnoreCase("description")) {
                             Log.i("Attribute", "description");
                             item.setDescription(parser.nextText());
-                        }else if (name.equalsIgnoreCase("link")) {
+                        } else if (name.equalsIgnoreCase("link")) {
                             Log.i("Attribute", "link");
                             item.setLink(parser.nextText().trim());
                         } else if (name.equals("georss:point")) {
@@ -81,7 +89,6 @@ public class TrafficXMLParser {
                     break;
                 case XmlPullParser.END_TAG:
                     name = parser.getName();
-                    Log.i("End tag", name);
                     if (name.equalsIgnoreCase("item") && item != null) {
                         Log.i("Added", item.toString());
                         incidents.add(item);
@@ -92,11 +99,8 @@ public class TrafficXMLParser {
             }
             eventType = parser.next();
         }
-            return incidents;
-        }
-
-
-
+        return incidents;
+    }
 
 
 }

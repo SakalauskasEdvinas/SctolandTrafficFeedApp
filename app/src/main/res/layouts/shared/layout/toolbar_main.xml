@@ -1,0 +1,12 @@
+<!--By Edvinas Sakalauskas -->
+
+<androidx.appcompat.widget.Toolbar android:layout_marginBottom="10dp"
+    android:id="@+id/toolbar"
+    android:minHeight="?attr/actionBarSize"
+    android:background="@color/colorPrimary"
+    app:titleTextColor="@android:color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+ />

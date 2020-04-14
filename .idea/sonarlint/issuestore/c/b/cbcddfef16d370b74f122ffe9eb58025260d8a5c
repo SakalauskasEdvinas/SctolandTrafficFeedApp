@@ -1,0 +1,17 @@
+
+L
+java:S1481•".Remove this unused "!unknown!" local variable.(‡²ñâ8àÈë÷•.
+N
+java:S1172×"+Remove this unused method parameter "view".(¹ÒÂÈøÿÿÿÿ8®Ûé¬–.
+Q
+java:S1481".Remove this unused "!unknown!" local variable.(Óã³¶úÿÿÿÿ8àÈë÷•.
+A
+java:S5411"*Use the primitive boolean expression here.(µ¤’
+w
+java:S1450G"ZRemove the "mapFragment" field and declare it as a local variable in the relevant methods.(Åıùô8Ó½â¬–.
+\
+java:S1155ö">Use isEmpty() to check whether the collection is empty or not.(òê«œ8 ÔóÎ•.
+M
+java:S1066¿"/Merge this if statement with the enclosing one.(•äµ©8Ÿ–ƒø•.
+X	java:S106"9Replace this use of System.out or System.err by a logger.( „ ‘úÿÿÿÿ8 ÔóÎ•.
+X	java:S106"9Replace this use of System.out or System.err by a logger.( äÄ‘úÿÿÿÿ8 ÔóÎ•.
