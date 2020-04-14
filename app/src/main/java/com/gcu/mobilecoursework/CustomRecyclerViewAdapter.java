@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gcu.mobilecoursework.model.RoadworkType;
 import com.gcu.mobilecoursework.model.TrafficFeedModel;
 
 import java.lang.ref.WeakReference;
@@ -19,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 // By Edvinas Sakalauskas - S1627176
-public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> implements Filterable {
+public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<CustomRecyclerViewAdapter.ViewHolder> implements Filterable {
 
     private List<TrafficFeedModel> trafficData;
     private List<TrafficFeedModel> trafficDataFiltered;
@@ -31,7 +32,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private WeakReference<TextView> textViewWeakReference;
 
     // data is passed into the constructor
-    public MyRecyclerViewAdapter(Context context, List<TrafficFeedModel> data, TextView infoArea) {
+    public CustomRecyclerViewAdapter(Context context, List<TrafficFeedModel> data, TextView infoArea) {
         this.mInflater = LayoutInflater.from(context);
         this.trafficData = data;
         this.trafficDataFiltered = data;
@@ -127,14 +128,15 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                 String charString = charSequence.toString();
                 if (charString.isEmpty() && selectedDate == null) {
                     trafficDataFiltered = trafficData;
-                } else {
+                }
+                else {
                     List<TrafficFeedModel> filteredList = new ArrayList<TrafficFeedModel>();
 
 
                     for (TrafficFeedModel row : trafficData) {
 
                         // here we are looking for title or or description match
-                        if (row.matchesTitleOrDescription(charString)) {
+                        if (row.matchesTitleOrDescription(charString) && row.getRoadworkType() != RoadworkType.INCIDENT) {
 
                             if (selectedDate != null) {
                                 Date startDate = row.getStartDate();
@@ -148,11 +150,18 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                                 filteredList.add(row);
                             }
 
+                        }else if (row.getRoadworkType() == RoadworkType.INCIDENT) {
+                            if(row.matchesTitleOrDescription(charString)) {
+                                filteredList.add(row);
+                            }
                         }
                     }
 
                     trafficDataFiltered = filteredList;
                 }
+
+
+
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = trafficDataFiltered;
 
@@ -163,6 +172,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 trafficDataFiltered = (ArrayList<TrafficFeedModel>) filterResults.values;
                 notifyDataSetChanged();
+
                 if(trafficDataFiltered.size() <=0 ) {
                     textViewWeakReference.get().setVisibility(View.VISIBLE);
                 } else {

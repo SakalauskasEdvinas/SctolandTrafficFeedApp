@@ -77,8 +77,8 @@ public class AsyncTrafficDataTask extends AsyncTask<Void, Integer, List<TrafficF
         try {
             URL url = new URL(trafficType);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setReadTimeout(10000 /* milliseconds */);
-            connection.setConnectTimeout(15000 /* milliseconds */);
+            connection.setReadTimeout(10000);
+            connection.setConnectTimeout(15000);
             connection.setRequestMethod("GET");
             connection.setDoInput(true);
             connection.connect();
@@ -99,14 +99,13 @@ public class AsyncTrafficDataTask extends AsyncTask<Void, Integer, List<TrafficF
             }
 
             trafficXMLParser = new TrafficXMLParser(roadworkType);
-
-
             trafficFeedList = trafficXMLParser.parseXML(stream);
 
 
         } catch (IOException e) {
-            Log.e("AsyncTask", "async task failed");
 
+            Log.e("AsyncTask", "async task failed");
+            Log.e("failed",e.getMessage());
         }
         return trafficFeedList;
     }

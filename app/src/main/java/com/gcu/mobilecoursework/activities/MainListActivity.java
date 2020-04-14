@@ -17,7 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.gcu.mobilecoursework.MyRecyclerViewAdapter;
+import com.gcu.mobilecoursework.CustomRecyclerViewAdapter;
 import com.gcu.mobilecoursework.R;
 import com.gcu.mobilecoursework.SpinnerFragment;
 import com.gcu.mobilecoursework.asynctasks.OnPreExecuteCallback;
@@ -31,9 +31,9 @@ import java.util.Date;
 import java.util.List;
 
 // By Edvinas Sakalauskas - S1627176
-public class MainListActivity extends BaseActivity implements MyRecyclerViewAdapter.ItemClickListener, OnTrafficDateRetrievedCallback, OnPreExecuteCallback {
+public class MainListActivity extends BaseActivity implements CustomRecyclerViewAdapter.ItemClickListener, OnTrafficDateRetrievedCallback, OnPreExecuteCallback {
 
-    protected MyRecyclerViewAdapter recycleViewAdapter;
+    protected CustomRecyclerViewAdapter recyclerViewAdapter;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private SpinnerFragment spinnerFragment;
@@ -55,9 +55,9 @@ public class MainListActivity extends BaseActivity implements MyRecyclerViewAdap
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (recycleViewAdapter != null) {
+                if (recyclerViewAdapter != null) {
                     searchQuery = query;
-                    recycleViewAdapter.getFilter().filter(query);
+                    recyclerViewAdapter.getFilter().filter(query);
 
                 }
                 return false;
@@ -65,9 +65,9 @@ public class MainListActivity extends BaseActivity implements MyRecyclerViewAdap
 
             @Override
             public boolean onQueryTextChange(String query) {
-                if (recycleViewAdapter != null) {
+                if (recyclerViewAdapter != null) {
                     searchQuery = query;
-                    recycleViewAdapter.getFilter().filter(query);
+                    recyclerViewAdapter.getFilter().filter(query);
 
                 }
                 return false;
@@ -88,9 +88,9 @@ public class MainListActivity extends BaseActivity implements MyRecyclerViewAdap
         dateSelectButton = findViewById(R.id.dateSelect);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.recycleViewAdapter = new MyRecyclerViewAdapter(this, new ArrayList<TrafficFeedModel>(), infoText);
-        this.recyclerView.setAdapter(recycleViewAdapter);
-        this.recycleViewAdapter.setClickListener(this);
+        this.recyclerViewAdapter = new CustomRecyclerViewAdapter(this, new ArrayList<TrafficFeedModel>(), infoText);
+        this.recyclerView.setAdapter(recyclerViewAdapter);
+        this.recyclerViewAdapter.setClickListener(this);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -109,7 +109,7 @@ public class MainListActivity extends BaseActivity implements MyRecyclerViewAdap
     //on roadwork click
     public void onItemClick(View view, int position) {
         Intent myIntent = new Intent(getApplicationContext(), SingleRoadworkDetailActivity.class);
-        myIntent.putExtra("trafficFeedModel", recycleViewAdapter.getItem(position));
+        myIntent.putExtra("trafficFeedModel", recyclerViewAdapter.getItem(position));
         this.startActivity(myIntent);
 
     }
@@ -129,21 +129,21 @@ public class MainListActivity extends BaseActivity implements MyRecyclerViewAdap
             datePickerDialogFragment.updateDate(null);
         }
 
-        recycleViewAdapter.setRecyclerViewData(data);
-        this.recycleViewAdapter.notifyDataSetChanged();
+        recyclerViewAdapter.setRecyclerViewData(data);
+        this.recyclerViewAdapter.notifyDataSetChanged();
         if (searchQuery != null) {
-            recycleViewAdapter.getFilter().filter(searchQuery);
+            recyclerViewAdapter.getFilter().filter(searchQuery);
         }
         progressBar.setVisibility(View.GONE);
 
-        if (recycleViewAdapter.getItemCount() == 0) {
+        if (recyclerViewAdapter.getItemCount() == 0) {
             infoText.setVisibility(View.VISIBLE);
         } else {
             recyclerView.setVisibility(View.VISIBLE);
 
         }
 
-        recycleViewAdapter.getFilter().filter(searchQuery);
+        recyclerViewAdapter.getFilter().filter(searchQuery);
 
     }
 
@@ -164,8 +164,8 @@ public class MainListActivity extends BaseActivity implements MyRecyclerViewAdap
         this.dateSelected = calendar.getTime();
         datePickerDialogFragment.updateDate(calendar);
 
-        recycleViewAdapter.setSelectedDate(this.dateSelected);
-        recycleViewAdapter.getFilter().filter(searchQuery);
+        recyclerViewAdapter.setSelectedDate(this.dateSelected);
+        recyclerViewAdapter.getFilter().filter(searchQuery);
 
         dateSelectButton.setText(DateUtility.dateToString(this.dateSelected) + "\n change");
 
@@ -190,8 +190,8 @@ public class MainListActivity extends BaseActivity implements MyRecyclerViewAdap
         if (searchQuery == null) {
             searchQuery = "";
         }
-        this.recycleViewAdapter.setSelectedDate(dateSelected);
-        this.recycleViewAdapter.getFilter().filter(searchQuery);
+        this.recyclerViewAdapter.setSelectedDate(dateSelected);
+        this.recyclerViewAdapter.getFilter().filter(searchQuery);
 
     }
 
